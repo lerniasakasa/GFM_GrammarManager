@@ -45,14 +45,21 @@ public class GrammarManager {
     public List<String> getCategories(){
        return defaultPGF.getCategories();
     }
-    public void loadWords(String from, String cat, String userInput){
+
+    public List<String> loadWords(String from, String cat, String userInput){
         try{
-        Concr languageX = langs.get(pgfName+from);
-        Iterable<TokenProb> tokens = languageX.complete(cat, userInput, ""); //figure out how you can change this dynamically for prefix when user types.
+            ArrayList<String> words = new ArrayList<String>();
+            Concr languageX = langs.get(pgfName+from);
+            Iterable<TokenProb> tokens = languageX.complete(cat, "apples", ""); //figure out how you can change this dynamically for prefix when user types.
 
         for(TokenProb tp: tokens){
-            System.out.println(tp.getToken());
-        }}
+            words.add(tp.getToken());
+
+            //System.out.println(tp.getToken());
+        }
+        return words;
+
+        }
         catch (ParseError e) {
             throw new RuntimeException(e);
         }
@@ -84,20 +91,31 @@ public class GrammarManager {
         //return Map<String, String> possibly
     }
 
-    public void getPGFInformation(){
-        System.out.println(pgfName);
-        System.out.println();
-        System.out.println("StartCategory:");
-        System.out.println(defaultPGF.getStartCat());
-        System.out.println();
-        System.out.println("Categories:");
-        System.out.println(defaultPGF.getCategories());
-        System.out.println();
-        System.out.println("Functions: ");
-        System.out.println(defaultPGF.getFunctions());
-    }
 
     //in progress
-    public void addRandom(){}
+    public void tree(String sentence, String from) throws ParseError {
+
+        Concr languageX = langs.get(pgfName+from);
+        Iterator<ExprProb> probEx = languageX.parse(defaultPGF.getStartCat(), sentence).iterator();
+
+        while(probEx.hasNext()) {
+            Expr exp = probEx.next().getExpr();
+            System.out.println(defaultPGF.graphvizAbstractTree(exp));
+        }
+    }
+
+    public void predict(){
+
+        //defaultPGF.compute();
+        //Iterable<ExprProb> allTemp = defaultPGF.generateAll(defaultPGF.getStartCat());
+
+
+        System.out.println(defaultPGF.getStartCat());
+
+
+
+
+
+    }
 
 }
