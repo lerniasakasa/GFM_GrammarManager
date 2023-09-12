@@ -32,6 +32,7 @@ public class GrammarManager {
         return defaultPGF;
     }
 
+
     //Listing languages
     public List<String> getLanguages(){
         Object[] languages = langs.keySet().toArray();
@@ -50,12 +51,11 @@ public class GrammarManager {
         try{
             ArrayList<String> words = new ArrayList<String>();
             Concr languageX = langs.get(pgfName+from);
-            Iterable<TokenProb> tokens = languageX.complete(cat, "apples", ""); //figure out how you can change this dynamically for prefix when user types.
+            Iterable<TokenProb> tokens = languageX.complete(cat, userInput, ""); //figure out how you can change this dynamically for prefix when user types.
 
         for(TokenProb tp: tokens){
             words.add(tp.getToken());
 
-            //System.out.println(tp.getToken());
         }
         return words;
 
@@ -66,31 +66,40 @@ public class GrammarManager {
         //return an arrayList of strings once you're done testing. **note to self
     }
 
-    public void getTranslation(String sentence,String from, String to) throws ParseError {
+    public List<String> getTranslation(String sentence,String from, String to) {//throws ParseError {
 
-        Concr languageX = langs.get(pgfName+from);
-        Iterator<ExprProb> probEx = languageX.parse(defaultPGF.getStartCat(), sentence).iterator();
+        try {
+            ArrayList<String> translation = new ArrayList<String>(); // list to store the final translations.
+            Concr languageX = langs.get(pgfName + from);
+            Iterator<ExprProb> probEx = languageX.parse(defaultPGF.getStartCat(), sentence).iterator();
 
-        while(probEx.hasNext()){
-            Expr exp = probEx.next().getExpr();
-            //translating to all the languages
-            if(to.equals("All")) {
-                Iterator<String> langNames = langs.keySet().iterator();
-                while (langNames.hasNext()) {
-                    String langName = langNames.next();
-                    Concr langGrammar = defaultPGF.getLanguages().get(langName);
-                    System.out.println(langName.replace(pgfName, "") + " = " + langGrammar.linearize(exp));
+            while (probEx.hasNext()) {
+                Expr exp = probEx.next().getExpr();
+                //translating to all the languages
+                if (to.equals("All")) {
+                    Iterator<String> langNames = langs.keySet().iterator();
+                    while (langNames.hasNext()) {
+                        String langName = langNames.next();
+                        Concr langGrammar = defaultPGF.getLanguages().get(langName);
+                        translation.add(langName.replace(pgfName, "") + " = " + langGrammar.linearize(exp));
+                    }
+
+                }
+                //translating to one language
+                else {
+                    Concr langGrammar = defaultPGF.getLanguages().get(pgfName + to);
+                    translation.add(to + " = " + langGrammar.linearize(exp));
+
                 }
             }
-            //translating to one language
-            else{
-                Concr langGrammar = defaultPGF.getLanguages().get(pgfName+to);
-                System.out.println(to + " = " + langGrammar.linearize(exp));
-            }
+            return translation;
         }
-        //return Map<String, String> possibly
-    }
+         catch (ParseError e) {
+            System.out.println(); //Either sentence is not complete or token can not be resolved.
+        }
 
+        return null;
+    }
 
     //in progress
     public void tree(String sentence, String from) throws ParseError {
@@ -102,20 +111,10 @@ public class GrammarManager {
             Expr exp = probEx.next().getExpr();
             System.out.println(defaultPGF.graphvizAbstractTree(exp));
         }
-    }
-
-    public void predict(){
-
-        //defaultPGF.compute();
-        //Iterable<ExprProb> allTemp = defaultPGF.generateAll(defaultPGF.getStartCat());
-
-
-        System.out.println(defaultPGF.getStartCat());
-
-
-
 
 
     }
+
+
 
 }

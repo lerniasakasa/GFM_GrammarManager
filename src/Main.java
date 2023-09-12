@@ -1,13 +1,3 @@
-import org.grammaticalframework.pgf.*;
-import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
-
 
 public class Main {
     public static void main(String[] args) {
@@ -17,7 +7,12 @@ public class Main {
             gm.loadGrammar("Phrasebook.pgf");
             //System.out.println(gm.getCategories());
 
-            System.out.println(gm.loadWords("Eng", "Phrase", ""));
+
+            RandomGenerator randomizer = new RandomGenerator(gm);
+            String r = randomizer.generate("Eng");
+            System.out.println(r);
+            //System.out.println(gm.getLanguages());
+            System.out.println(gm.getTranslation(r, "Eng", "Spa"));
             //gm.getTranslation("we want expensive bread", "Eng", "All");
             //gm.tree("we want expensive bread", "Eng");
 
