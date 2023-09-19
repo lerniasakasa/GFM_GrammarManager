@@ -26,6 +26,11 @@ public class RandomGenerator{
                 chosen = select(words);
                 sentence = sentence + chosen + " ";
             }
+
+            if(validate(sentence, language) == false){
+               sentence = generate(language); //regenerate
+            }
+
             return sentence;
 
     }
@@ -39,5 +44,22 @@ public class RandomGenerator{
         else{}
 
         return word;
+    }
+
+
+    //check if the randomly generated sentence can be translated.
+    private boolean validate(String s, String language){
+
+        boolean valid = false;
+
+        if(gManager.getTranslation(s, language, "All") == null){
+            return valid;
+        }
+        else{
+            valid = true;
+            return valid;
+
+        }
+
     }
 }

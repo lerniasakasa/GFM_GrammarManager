@@ -1,3 +1,9 @@
+import org.grammaticalframework.pgf.*;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,13 +14,24 @@ public class Main {
             //System.out.println(gm.getCategories());
 
 
-            RandomGenerator randomizer = new RandomGenerator(gm);
-            String r = randomizer.generate("Eng");
-            System.out.println(r);
+            PGF pgf = PGF.readPGF("Phrasebook.pgf");
+
+
+
+
+            //gm.tree("the apple please", "Eng");
+            //RandomGenerator randomizer = new RandomGenerator(gm);
+            //String r = randomizer.generate("Eng");
+            //System.out.println(r);
             //System.out.println(gm.getLanguages());
-            System.out.println(gm.getTranslation(r, "Eng", "Spa"));
+            //System.out.println(gm.getTranslation(r, "Eng", "All"));
             //gm.getTranslation("we want expensive bread", "Eng", "All");
             //gm.tree("we want expensive bread", "Eng");
+           // gm.loadWords("Eng", "Phrase", "");
+           // System.out.println(gm.loadWords("Eng", "Phrase", ""));
+
+           // System.out.println("Clean list below");
+            //System.out.println(gm.duplicateSearch(gm.loadWords("Eng", "Phrase", "")));
 
 
             // SETTING UP THE WORDS
@@ -29,4 +46,8 @@ public class Main {
             e.printStackTrace();
         }
     }
-}
+        //catch (FileNotFoundException e) {
+            //throw new RuntimeException(e);
+        //}
+
+    }

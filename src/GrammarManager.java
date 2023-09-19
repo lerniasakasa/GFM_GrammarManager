@@ -57,7 +57,7 @@ public class GrammarManager {
             words.add(tp.getToken());
 
         }
-        return words;
+        return duplicateSearch(words);
 
         }
         catch (ParseError e) {
@@ -95,12 +95,25 @@ public class GrammarManager {
             return translation;
         }
          catch (ParseError e) {
-            System.out.println(); //Either sentence is not complete or token can not be resolved.
+            System.out.println(); //Either sentence is not complete or token can not be resolved.dfs
         }
 
         return null;
     }
 
+
+    //search for duplicates
+
+    public List<String> duplicateSearch(ArrayList<String> list){
+
+        ArrayList<String> cleanList = new ArrayList<String>();
+
+        for(int x= 0; x< list.size(); x++){
+            if( cleanList.contains(list.get(x)) ) continue;
+            else cleanList.add(list.get(x));
+        }
+        return cleanList;
+    }
     //in progress
     public void tree(String sentence, String from) throws ParseError {
 
@@ -111,7 +124,6 @@ public class GrammarManager {
             Expr exp = probEx.next().getExpr();
             System.out.println(defaultPGF.graphvizAbstractTree(exp));
         }
-
 
     }
 
